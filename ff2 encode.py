@@ -6,19 +6,21 @@ version = "v. 0.0.1"
 
 import string
 import time
+import random
 from datetime import datetime
 alphabet = list(map(chr, range(ord('a'), ord('z')+1)))
-alphabet = alphabet + range(0,10)
+alphabet = alphabet + ['0','1','2','3','4','5','6','7','8','9']
 errorlog = []
 
 def logerror(errorNo):
 	global errorlog
 	errorlog += [[errorNo,datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")]]
 
-def keygen(): #TODO
-	print("TODO")
+def keygen():
+	a = alphabet[random.randint(0,35)]+alphabet[random.randint(0,35)]
+	return a
 
-def textinput():
+def FF2textinput():
 	input = ""
 	input = raw_input(">")
 	input = str("" if input is None else input)
@@ -29,7 +31,7 @@ def textinput():
 		return False	
 
 def keyinput():
-	key = raw_input("If you want to use a random key (recommended) press ENTER, else type the two characters. you wish to use as the key. Only type standard Letters or Numbers. Type help for more info.")
+	key = raw_input("If you want to use a random key (recommended) press ENTER, else type the two characters. you wish to use as the key. Only type standard Letters or Numbers. Type help for more info.\n")
 	key = str("" if key is None else key)
 	key = key.lower()
 	if (key == "help" or key == "h" or key == "?"):
@@ -60,8 +62,24 @@ def keyinput():
 			logerror("02")
 		return False
 
-def encode(text,key): #TODO
-	print("TODO")
+def encode(inputText,key): #TODO
+	i = 0
+	encoded = ""
+	activekey = key
+	output = ""
+	while i < ((len(inputText)/2)+1):
+		char1 = inputText[(2*i)]
+		if ((len(inputText))%2) == 0 or len(inputText) < i*2+1:
+			char2 = inputText[(2*i)+1]
+		else:
+			char2 = 'X'
+		output += encode2(char1,char2,activekey)
+		activekey = output[-2:-1]
+		i += 1
+	output = output[0]+key[0]+output[1:]+key[1]
+	return output
+		
+		
 	
 		
 
@@ -72,8 +90,8 @@ def encode(text,key): #TODO
 print("FF2 Cipher encoder: "+version+"\n     Type the text you wish to encode. Press enter when finished\n")
 text = False
 while text == False:
-	text = textinput()
+	text = FF2textinput()
 key = False
 while key == False: #loop if keyinput() returns False (if it encounters an error)
 	key = keyinput()
-encode(input,key)
+encode(text,key)
